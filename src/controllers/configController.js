@@ -1,6 +1,6 @@
-import { CARRERAS_UVG, TIPOS_INTERES } from "../../utils/constants.js";
+import { CARRERAS_UVG, TIPOS_INTERES } from "../utils/constants.js";
 import { emailConfig } from "../config/email.js";
-import logger from "../../utils/logger.js";
+import logger from "../utils/logger.js";
 
 class ConfigController {
   /**

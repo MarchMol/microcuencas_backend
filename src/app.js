@@ -8,7 +8,7 @@ import appConfig from './config/app.js';
 import { validateConfig } from './config/email.js';
 import { generalRateLimiter } from './middleware/rateLimiter.js';
 import { errorHandler, notFoundHandler, sanitizeResponse, validateSecurityConfig } from './middleware/errorHandler.js';
-import logger from '../utils/logger.js';
+import logger from './utils/logger.js';
 
 // Importar rutas
 import apiRoutes from './routes/index.js';

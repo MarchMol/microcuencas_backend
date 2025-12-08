@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-import { CARRERAS_UVG, TIPOS_INTERES } from "../../utils/constants.js"; 
+import { CARRERAS_UVG, TIPOS_INTERES } from "../utils/constants.js"; 
 
 const contactSchema = Joi.object({
     nombre: Joi.string()

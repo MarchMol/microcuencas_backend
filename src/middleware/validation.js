@@ -1,6 +1,6 @@
 import { ValidationService,ValidationError } from '../services/validationService.js';
-import { HTTP_STATUS, ERROR_CODES } from '../../utils/constants.js';
-import logger from '../../utils/logger.js';
+import { HTTP_STATUS, ERROR_CODES } from '../utils/constants.js';
+import logger from '../utils/logger.js';
 
 /**
  * Middleware para validar datos de contacto

@@ -1,7 +1,7 @@
 import emailjs from "@emailjs/nodejs"
 import { emailConfig } from "../config/email.js"
-import logger from "../../utils/logger.js"
-import { formatearFechaGuatemala, generateTrackingId } from "../../utils/helpers.js"
+import logger from "../utils/logger.js"
+import { formatearFechaGuatemala, generateTrackingId } from "../utils/helpers.js"
 
 class EmailService {
     constructor() {
