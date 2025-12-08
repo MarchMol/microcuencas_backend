@@ -95,117 +95,117 @@ class EmailService {
     return messages[tipoInteres] || 'Nuestro equipo revisará tu solicitud y te contactará pronto.';
   }
 
-    /**
-     * Enviar email principal al encargado del proyecto
-     */
-    async sendMainEmail(contactData) {
-        if (!this.isInitialized) {
-            throw new Error('EmailJS no está inicializado');
-        }
-
-        const templateParams = this.buildTemplateParams(contactData);
-
-        logger.info('Enviando email principal', {
-            to: emailConfig.project.email,
-            from: contactData.email,
-            trackingId: templateParams.tracking_id
-        });
-
-        try {
-            const result = await emailjs.send(
-                emailConfig.emailjs.serviceId,
-                emailConfig.emailjs.templateId,
-                templateParams
-            );
-
-            logger.info('Email principal enviado exitosamente', {
-                status: result.status,
-                trackingId: templateParams.tracking_id
-            });
-
-            return {
-                success: true,
-                messageId: result.text,
-                trackingId: templateParams.tracking_id
-            };
-        } catch (error) {
-            logger.error('Error enviando email principal:', {
-                error: error.message,
-                status: error.status,
-                trackingId: templateParams.tracking_id
-            });
-            throw error;
-        }
+  /**
+   * Enviar email principal al encargado del proyecto
+   */
+  async sendMainEmail(contactData) {
+    if (!this.isInitialized) {
+      throw new Error('EmailJS no está inicializado');
     }
 
-    /**
-     * Enviar email de confirmación al usuario
-     */
-    async sendConfirmationEmail(contactData) {
-        if (!emailConfig.settings.enableConfirmation || !emailConfig.emailjs.confirmationTemplateId) {
-            logger.info('Confirmación de email deshabilitada');
-            return { success: false, reason: 'confirmation_disabled' };
-        }
+    const templateParams = this.buildTemplateParams(contactData);
 
-        const confirmationParams = this.buildConfirmationParams(contactData);
+    logger.info('Enviando email principal', {
+      to: emailConfig.project.email,
+      from: contactData.email,
+      trackingId: templateParams.tracking_id
+    });
 
-        logger.info('Enviando email de confirmación', {
-            to: contactData.email
-        });
+    try {
+      const result = await emailjs.send(
+        emailConfig.emailjs.serviceId,
+        emailConfig.emailjs.templateId,
+        templateParams
+      );
 
-        try {
-            const result = await emailjs.send(
-                emailConfig.emailjs.serviceId,
-                emailConfig.emailjs.confirmationTemplateId,
-                confirmationParams
-            );
+      logger.info('Email principal enviado exitosamente', {
+        status: result.status,
+        trackingId: templateParams.tracking_id
+      });
 
-            logger.info('Email de confirmación enviado exitosamente', {
-                status: result.status,
-                to: contactData.email
-            });
+      return {
+        success: true,
+        messageId: result.text,
+        trackingId: templateParams.tracking_id
+      };
+    } catch (error) {
+      logger.error('Error enviando email principal:', {
+        error: error.message,
+        status: error.status,
+        trackingId: templateParams.tracking_id
+      });
+      throw error;
+    }
+  }
 
-            return {
-                success: true,
-                messageId: result.text
-            };
-        } catch (error) {
-            logger.warn('Error enviando confirmación (no crítico):', {
-                error: error.message,
-                to: contactData.email
-            });
-
-            // No fallar por esto, el email principal ya se envió
-            return {
-                success: false,
-                error: error.message,
-                reason: 'confirmation_failed'
-            };
-        }
+  /**
+   * Enviar email de confirmación al usuario
+   */
+  async sendConfirmationEmail(contactData) {
+    if (!emailConfig.settings.enableConfirmation || !emailConfig.emailjs.confirmationTemplateId) {
+      logger.info('Confirmación de email deshabilitada');
+      return { success: false, reason: 'confirmation_disabled' };
     }
 
-    /**
-     * Procesar envío completo de emails
-     */
-    async processContactEmail(contactData) {
-        try {
-            // Enviar email principal (crítico)
-            const mainResult = await this.sendMainEmail(contactData);
+    const confirmationParams = this.buildConfirmationParams(contactData);
 
-            // Enviar confirmación (opcional)
-            const confirmationResult = await this.sendConfirmationEmail(contactData);
+    logger.info('Enviando email de confirmación', {
+      to: contactData.email
+    });
 
-            return {
-                success: true,
-                mainEmail: mainResult,
-                confirmation: confirmationResult,
-                timestamp: new Date().toISOString()
-            };
-        } catch (error) {
-            logger.error('Error en proceso de envío de emails:', error);
-            throw error;
-        }
+    try {
+      const result = await emailjs.send(
+        emailConfig.emailjs.serviceId,
+        emailConfig.emailjs.confirmationTemplateId,
+        confirmationParams
+      );
+
+      logger.info('Email de confirmación enviado exitosamente', {
+        status: result.status,
+        to: contactData.email
+      });
+
+      return {
+        success: true,
+        messageId: result.text
+      };
+    } catch (error) {
+      logger.warn('Error enviando confirmación (no crítico):', {
+        error: error.message,
+        to: contactData.email
+      });
+
+      // No fallar por esto, el email principal ya se envió
+      return {
+        success: false,
+        error: error.message,
+        reason: 'confirmation_failed'
+      };
     }
+  }
+
+  /**
+   * Procesar envío completo de emails
+   */
+  async processContactEmail(contactData) {
+    try {
+      // Enviar email principal (crítico)
+      const mainResult = await this.sendMainEmail(contactData);
+
+      // Enviar confirmación (opcional)
+      const confirmationResult = await this.sendConfirmationEmail(contactData);
+
+      return {
+        success: true,
+        mainEmail: mainResult,
+        confirmation: confirmationResult,
+        timestamp: new Date().toISOString()
+      };
+    } catch (error) {
+      logger.error('Error en proceso de envío de emails:', error);
+      throw error;
+    }
+  }
 }
 
 export default EmailService;

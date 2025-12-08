@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import 'dotenv/config';
-
+import { setTimeout } from 'timers';
 // Importar configuración y middlewares
 import appConfig from './config/app.js';
 import { validateConfig } from './config/email.js';
@@ -27,7 +27,7 @@ class MicrocuencaApp {
       this.setupMiddlewares();
       this.setupRoutes();
       this.setupErrorHandling();
-      
+
       logger.info('Aplicación inicializada correctamente');
     } catch (error) {
       logger.error('Error inicializando aplicación:', error);
@@ -40,10 +40,10 @@ class MicrocuencaApp {
       this.app.use(helmet({
         contentSecurityPolicy: {
           directives: {
-            defaultSrc: ["'self'"],
-            styleSrc: ["'self'", "'unsafe-inline'"],
-            scriptSrc: ["'self'"],
-            imgSrc: ["'self'", "data:", "https:"]
+            defaultSrc: ['\'self\''],
+            styleSrc: ['\'self\'', '\'unsafe-inline\''],
+            scriptSrc: ['\'self\''],
+            imgSrc: ['\'self\'', 'data:', 'https:']
           }
         }
       }));
@@ -59,7 +59,7 @@ class MicrocuencaApp {
     }
 
     this.app.use(generalRateLimiter);
-    this.app.use(sanitizeResponse)
+    this.app.use(sanitizeResponse);
 
   }
 
@@ -86,14 +86,14 @@ class MicrocuencaApp {
 
   setupErrorHandling() {
     this.app.use(notFoundHandler);
-    
+
     // Error handler global
     this.app.use(errorHandler);
   }
 
   start() {
     const port = appConfig.port;
-    
+
     this.server = this.app.listen(port, () => {
       logger.info(`🌿 Servidor iniciado en puerto ${port}`, {
         environment: appConfig.nodeEnv,
@@ -108,7 +108,7 @@ class MicrocuencaApp {
   setupGracefulShutdown() {
     const shutdown = (signal) => {
       logger.info(`${signal} recibido, cerrando servidor...`);
-      
+
       this.server.close(() => {
         logger.info('Servidor cerrado exitosamente');
         process.exit(0);

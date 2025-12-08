@@ -1,6 +1,6 @@
-import { CARRERAS_UVG, TIPOS_INTERES } from "../utils/constants.js";
-import { emailConfig } from "../config/email.js";
-import logger from "../utils/logger.js";
+import { CARRERAS_UVG, TIPOS_INTERES } from '../utils/constants.js';
+import { emailConfig } from '../config/email.js';
+import logger from '../utils/logger.js';
 
 class ConfigController {
   /**
@@ -28,7 +28,7 @@ class ConfigController {
         }
       };
 
-      logger.info('Configuración pública solicitada', { 
+      logger.info('Configuración pública solicitada', {
         requestIP: req.ip,
         userAgent: req.get('User-Agent')
       });

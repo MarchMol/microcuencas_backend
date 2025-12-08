@@ -4,7 +4,7 @@ import logger from '../utils/logger.js';
 /**
  * Middleware para manejo de errores global - VERSIÓN SEGURA
  */
-export const errorHandler = (error, req, res, next) => {
+export const errorHandler = (error, req, res, _next) => {
   // Log completo del error SOLO en logs del servidor
   logger.error('Error no manejado:', {
     error: error.message,
@@ -50,7 +50,7 @@ export const errorHandler = (error, req, res, next) => {
 
   // ❌ NUNCA incluir en producción:
   // - error.stack
-  // - error.details 
+  // - error.details
   // - rutas de archivos
   // - variables internas
   // - información del servidor
@@ -94,12 +94,12 @@ export const notFoundHandler = (req, res) => {
 export const sanitizeResponse = (req, res, next) => {
   // Remover headers que podrían exponer información
   res.removeHeader('X-Powered-By');
-  
+
   // Agregar headers de seguridad
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
-  
+
   next();
 };
 
@@ -133,7 +133,7 @@ export const validateSecurityConfig = () => {
     if (process.env.SHOW_ERROR_DETAILS === 'true') {
       warnings.push('SHOW_ERROR_DETAILS debe ser false en producción');
     }
-    
+
     if (process.env.LOG_LEVEL === 'debug') {
       warnings.push('LOG_LEVEL no debe ser debug en producción');
     }

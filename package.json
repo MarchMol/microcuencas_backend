@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "backend service for the Microcuencas page.",
   "main": "app.js",
-    "engines": {
-    "node": "21.x"
-  },
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
@@ -21,9 +18,9 @@
   "type": "module",
   "license": "MIT",
   "dependencies": {
+    "@emailjs/nodejs": "^5.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
-    "@emailjs/nodejs": "^4.0.3",
     "express": "^5.1.0",
     "express-rate-limit": "^8.1.0",
     "helmet": "^8.1.0",

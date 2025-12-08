@@ -1,7 +1,7 @@
-import EmailService from "../services/emailService.js";
-import { HTTP_STATUS, ERROR_CODES } from "../utils/constants.js";
-import logger from "../utils/logger.js";
-import { isUVGEmail,sanitizeString } from "../utils/helpers.js";
+import EmailService from '../services/emailService.js';
+import { HTTP_STATUS } from '../utils/constants.js';
+import logger from '../utils/logger.js';
+import { isUVGEmail,sanitizeString } from '../utils/helpers.js';
 
 class ContactController {
   constructor() {
@@ -20,7 +20,7 @@ class ContactController {
   async processContact(req, res, next) {
     try {
       const contactData = req.body; // Ya validado por middleware
-      
+
       // Sanitizar datos adicionales
       const sanitizedData = {
         ...contactData,
@@ -63,7 +63,7 @@ class ContactController {
     } catch (error) {
       // Actualizar estadísticas
       this.updateStats(false);
-      
+
       // Log detallado SOLO en logs del servidor
       logger.error('Error procesando contacto:', {
         error: error.message,
@@ -77,7 +77,7 @@ class ContactController {
       const cleanError = new Error('Error procesando solicitud de contacto');
       cleanError.name = 'ContactProcessingError';
       cleanError.statusCode = 500;
-      
+
       // Delegar al middleware de manejo de errores
       next(cleanError);
     }
@@ -95,7 +95,7 @@ class ContactController {
           seconds: Math.floor(uptime),
           formatted: this.formatUptime(uptime)
         },
-        tasaExito: this.stats.emailsEnviados > 0 
+        tasaExito: this.stats.emailsEnviados > 0
           ? ((this.stats.emailsEnviados / (this.stats.emailsEnviados + this.stats.errores)) * 100).toFixed(2)
           : 100,
         memoria: process.memoryUsage(),
@@ -103,7 +103,7 @@ class ContactController {
       };
 
       logger.info('Estadísticas solicitadas', { requestIP: req.ip });
-      
+
       res.json({
         success: true,
         stats,
@@ -171,7 +171,7 @@ class ContactController {
     const days = Math.floor(uptimeSeconds / (24 * 60 * 60));
     const hours = Math.floor((uptimeSeconds % (24 * 60 * 60)) / (60 * 60));
     const minutes = Math.floor((uptimeSeconds % (60 * 60)) / 60);
-    
+
     return `${days}d ${hours}h ${minutes}m`;
   }
 }
